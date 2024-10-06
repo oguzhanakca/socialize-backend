@@ -5,7 +5,7 @@ import cloudinary.uploader
 
 class PostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    image = serializers.ImageField(write_only=True)
+    image = serializers.ImageField(write_only=True, required=False)
     image_url = serializers.CharField(source='image.url', read_only=True)
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
@@ -34,11 +34,15 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = [
             'id', 'owner', 'created_at', 'updated_at', 'title', 'content',
-            'image', 'image_url', 'is_owner', 'profile_id', 'profile_image'
+            'image', 'image_url', 'image_filter', 'is_owner', 'profile_id', 'profile_image'
         ]
         
     def create(self, validated_data):
-        image = validated_data.pop('image')
-        upload_data = cloudinary.uploader.upload(image)
-        validated_data['image'] = upload_data['public_id']
+        image = validated_data.pop('image', None)
+        if image:   
+            upload_data = cloudinary.uploader.upload(image)
+            validated_data['image'] = upload_data['public_id']
+        else:
+            validated_data['image'] = 'default_post_uu0i5n'
+            
         return Post.objects.create(**validated_data)

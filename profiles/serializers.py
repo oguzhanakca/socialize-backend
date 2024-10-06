@@ -17,7 +17,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = [
             'id', 'owner', 'created_at', 'updated_at', 'name', 'bio',
-            'image', 'image_filter', 'image_url', 'is_owner'
+            'image', 'image_url', 'is_owner'
         ]
         
     def create(self, validated_data):
