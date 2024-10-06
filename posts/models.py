@@ -29,7 +29,7 @@ class Post(models.Model):
         'post_image', default= 'default_post_uu0i5n'
     )
     image_filter = models.CharField(
-        max_length=32, choices=image_filter_choices
+        max_length=32, choices=image_filter_choices, default='normal'
     )
 
     class Meta:
