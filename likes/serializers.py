@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from rest_framework import serializers
 from .models import PostLike, CommentLike
 
@@ -18,14 +19,13 @@ class PostLikeSerializer(serializers.ModelSerializer):
         ]
         
     def create(self, validated_data):
-        owner = validated_data.get('owner')
-        post = validated_data.get('post')
-        already_liked = PostLike.objects.filter(owner=owner, post=post).first()
-        if already_liked:
-            already_liked.delete()
+        try:
+            return super().create(validated_data)
+        except IntegrityError:
             raise serializers.ValidationError({
-                'detail': "You've disliked the post"
+                'detail': "You've disliked the post."
             })
+            
         
         
 class CommentLikeSerializer(serializers.ModelSerializer):
@@ -44,11 +44,9 @@ class CommentLikeSerializer(serializers.ModelSerializer):
         ]
         
     def create(self, validated_data):
-        owner = validated_data.get('owner')
-        comment = validated_data.get('comment')
-        already_liked = CommentLike.objects.filter(owner=owner, comment=comment).first()
-        if already_liked:
-            already_liked.delete()
+        try:
+            return super().create(validated_data)
+        except IntegrityError:
             raise serializers.ValidationError({
-                'detail': "You've disliked the comment"
+                'detail': "You've disliked the comment."
             })
