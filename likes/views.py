@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 from socialize_backend.permissions import IsOwnerOrReadOnly
-from likes.models import PostLike, CommentLike
-from likes.serializers import PostLikeSerializer, CommentLikeSerializer
+from .models import PostLike, CommentLike
+from .serializers import PostLikeSerializer, CommentLikeSerializer
 
 
 class PostLikeList(generics.ListCreateAPIView):
