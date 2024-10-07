@@ -6,8 +6,7 @@ from cloudinary.models import CloudinaryField
 
 class Post(models.Model):
     """
-    Post model, related to 'owner', i.e. a User instance.
-    Default image set so that we can always reference image.url.
+    Post model
     """
     
     image_filter_choices = [
