@@ -10,7 +10,7 @@ class FollowerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follower
         fields = [
-            'id', 'owner', 'post', 
+            'id', 'owner', 'followed', 
             'created_at', 'followed_name'
         ]
         
