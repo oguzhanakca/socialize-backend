@@ -65,7 +65,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'socialize-backend-app.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', 'https://socialize-backend-app-9beed826b5f2.herokuapp.com/']
 
 
 # Application definition
