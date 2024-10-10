@@ -48,6 +48,7 @@ REST_AUTH = {
     'USE-JWT': True,
     'JWT_AUTH_COOKIE': 'my-app-auth',
     'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
+    'JWT_AUTH_SECURE': True,
     'JWT_AUTH_SAMESITE': 'None',
 }
 
@@ -65,7 +66,10 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'socialize-backend-app-9beed826b5f2.herokuapp.com']
+ALLOWED_HOSTS = [
+   os.environ.get('ALLOWED_HOST'),
+   'localhost',
+]
 
 
 # Application definition
