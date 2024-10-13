@@ -12,7 +12,7 @@ class FollowerList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
     def get_queryset(self):
-        return Follower.objects.filter(followed=self.request.user)
+        return Follower.objects.filter(owner=self.request.user)
     
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
