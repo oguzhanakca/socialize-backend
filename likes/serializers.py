@@ -29,7 +29,7 @@ class CommentLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentLike
         fields = [
-            'id', 'owner', 'post', 
+            'id', 'owner', 'comment', 
             'created_at'
         ]
         
