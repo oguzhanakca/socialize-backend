@@ -8,31 +8,20 @@ class FollowerList(generics.ListCreateAPIView):
     """
     List all followers
     """
-    serializer_class = FollowerSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    
-    def get_queryset(self):
-        return Follower.objects.filter(owner=self.request.user)
-    
+    queryset = Follower.objects.all()
+    serializer_class = FollowerSerializer
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-        
-        
+
+
 class FollowerDetail(generics.RetrieveDestroyAPIView):
     """
     Retrieve a follower
-    Unfollow if you follow someone
+    Follow or Unfollow users
+    Destroy a follower
     """
     permission_classes = [IsOwnerOrReadOnly]
-    serializer_class = FollowerSerializer
     queryset = Follower.objects.all()
-    
-class FollowingList(generics.ListAPIView):
-    """
-    List users who are following the current logged-in user
-    """
     serializer_class = FollowerSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return Follower.objects.filter(followed=self.request.user)
