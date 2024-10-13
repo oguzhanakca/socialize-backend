@@ -13,7 +13,7 @@ class FollowerSerializer(serializers.ModelSerializer):
         model = Follower
         fields = [
             'id', 'owner', 'followed', 
-            'created_at',
+            'created_at', 'follower_user',
         ]
         
     def create(self, validated_data):
