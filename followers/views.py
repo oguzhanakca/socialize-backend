@@ -25,7 +25,7 @@ class FollowerDetail(generics.RetrieveDestroyAPIView):
     serializer_class = FollowerSerializer
     queryset = Follower.objects.all()
     
-class FollowersOfMeList(generics.ListAPIView):
+class FollowingList(generics.ListAPIView):
     """
     List users who are following the current logged-in user
     """
