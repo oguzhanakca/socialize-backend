@@ -1,13 +1,11 @@
 from django.db import IntegrityError
 from rest_framework import serializers
 from .models import Follower
-from profiles.models import Profile
-
 
 
 class FollowerSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    followed_user = serializers.ReadOnlyField(source='followed')
+    followed_user = serializers.ReadOnlyField(source='followed.id')
         
     class Meta:
         model = Follower
