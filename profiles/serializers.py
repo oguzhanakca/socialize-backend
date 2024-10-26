@@ -6,7 +6,7 @@ import cloudinary.uploader
 
 class ProfileSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    image = serializers.ImageField(write_only=True)
+    image = serializers.ImageField(write_only=True, required=False)
     image_url = serializers.CharField(source='image.url', read_only=True)
     is_owner = serializers.SerializerMethodField()
     following_id = serializers.SerializerMethodField()
@@ -48,12 +48,3 @@ class ProfileSerializer(serializers.ModelSerializer):
         validated_data['image'] = upload_data['public_id']
         return Profile.objects.create(**validated_data)
     
-    def update(self, instance, validated_data):
-        image = validated_data.pop('image', None)
-        
-        if image:
-            upload_data = cloudinary.uploader.upload(image)
-            validated_data['image'] = upload_data['public_id']
-        
-        instance.save()
-        return instance
