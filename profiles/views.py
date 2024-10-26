@@ -41,17 +41,13 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
     permission_classes = [IsOwnerOrReadOnly]
     def get_queryset(self):
         user = self.request.user
-        return Profile.objects.annotate(
+        queryset = Profile.objects.annotate(
         posts_count=Count('owner__post', distinct=True),
         followers_count=Count('owner__followed', distinct=True),
         following_count=Count('owner__following', distinct=True)
-    ).filter(models.Q(is_private=False) | models.Q(owner__following__followed=user)).order_by('-created_at')
+        ).filter(models.Q(is_private=False) | models.Q(owner__following__followed=user)).order_by('-created_at')
+        print("Queryset:", queryset)
+        return queryset
         
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)  
-        self.perform_update(serializer)
 
-        return Response(serializer.data)
+        
