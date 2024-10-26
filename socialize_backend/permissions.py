@@ -12,7 +12,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             if not obj.owner.profile.is_private:  
                 return True
             return Follower.objects.filter(
-                owner=obj.owner, followed=request.user
+                owner=request.owner, followed=obj.user
             ).exists() or obj.owner == request.user
         return obj.owner == request.user
     

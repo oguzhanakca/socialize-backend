@@ -8,7 +8,7 @@ class FollowerList(generics.ListCreateAPIView):
     """
     List all followers
     """
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Follower.objects.all()
     serializer_class = FollowerSerializer
 
