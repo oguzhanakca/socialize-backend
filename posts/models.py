@@ -30,6 +30,7 @@ class Post(models.Model):
     image_filter = models.CharField(
         max_length=32, choices=image_filter_choices, default='normal'
     )
+    is_private = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created_at']

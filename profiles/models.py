@@ -17,6 +17,7 @@ class Profile(models.Model):
     image = CloudinaryField(
         'profile_picture', default= 'default_profile_wxoxmn'
     )
+    is_private = models.BooleanField(default=False)
     
     class Meta:
         ordering = ['-created_at']
