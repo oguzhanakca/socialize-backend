@@ -45,8 +45,7 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
         posts_count=Count('owner__post', distinct=True),
         followers_count=Count('owner__followed', distinct=True),
         following_count=Count('owner__following', distinct=True)
-        ).filter(models.Q(is_private=False) | models.Q(owner__following__followed=user)).order_by('-created_at')
-        print("Queryset:", queryset)
+        ).order_by('-created_at')
         return queryset
         
 
