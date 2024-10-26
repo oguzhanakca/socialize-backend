@@ -9,7 +9,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     """
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
-            if not obj.owner.profile.is_private:  
+            if not obj.is_private:  
                 return True
             return Follower.objects.filter(
                 owner=request.user, followed=obj.owner
