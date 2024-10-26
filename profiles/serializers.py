@@ -41,6 +41,9 @@ class ProfileSerializer(serializers.ModelSerializer):
             'image', 'image_url', 'is_owner', 'following_id', 'posts_count', 'followed_by_current_user',
             'followers_count', 'following_count'
         ]
+        extra_kwargs = {
+            'image': {'required': False} 
+        }
         
     def create(self, validated_data):
         image = validated_data.pop('image')
