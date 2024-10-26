@@ -37,7 +37,7 @@ class ProfileList(generics.ListAPIView):
         
         return Profile.objects.annotate(
             posts_count=Count('owner__post', distinct=True),followers_count=Count('owner__followed', distinct=True),following_count=Count('owner__following', distinct=True)
-            ).filter(models.Q(is_private=False) | models.Q(owner__following__followed__owner=user) | models.Q(owner=user)).order_by('-created_at')
+            ).filter(models.Q(is_private=False) | models.Q(owner__following__followed=user) | models.Q(owner=user)).order_by('-created_at')
     
     
 
