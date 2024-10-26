@@ -41,12 +41,19 @@ class ProfileSerializer(serializers.ModelSerializer):
             'image', 'image_url', 'is_owner', 'following_id', 'posts_count', 'followed_by_current_user',
             'followers_count', 'following_count'
         ]
-        extra_kwargs = {
-            'image': {'required': False} 
-        }
         
     def create(self, validated_data):
         image = validated_data.pop('image')
         upload_data = cloudinary.uploader.upload(image)
         validated_data['image'] = upload_data['public_id']
         return Profile.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        image = validated_data.pop('image', None)
+        
+        if image:
+            upload_data = cloudinary.uploader.upload(image)
+            validated_data['image'] = upload_data['public_id']
+        
+        instance.save()
+        return instance
