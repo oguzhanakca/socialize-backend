@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 from .models import Chat, Message
-from profiles.models import Profile
+from django.contrib.auth.models import User
 from .serializers import ChatSerializer, MessageSerializer
 from socialize_backend.permissions import IsMessageOwnerOrInChat
 
@@ -17,7 +17,7 @@ class ChatListCreateView(generics.ListCreateAPIView):
     
     def perform_create(self, serializer):
         user2_id = self.request.data.get('user2')
-        user2 = Profile.objects.get(id=user2_id)
+        user2 = User.objects.get(id=user2_id)
 
         serializer.save(user1=self.request.user, user2=user2)
 
