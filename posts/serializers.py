@@ -5,7 +5,7 @@ import cloudinary.uploader
 
 
 class PostSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.profile')
+    owner = serializers.ReadOnlyField(source='owner.username')
     image = serializers.ImageField(write_only=True, required=False)
     image_url = serializers.CharField(source='image.url', read_only=True)
     is_owner = serializers.SerializerMethodField()
@@ -14,6 +14,8 @@ class PostSerializer(serializers.ModelSerializer):
     like_id = serializers.SerializerMethodField()
     postlikes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
+    is_private = serializers.ReadOnlyField(source='owner.profile.is_private')
+
     
     def validate_image(self, value):
         if value.size > 1024 * 1024 * 2:
@@ -46,7 +48,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'id', 'owner', 'created_at', 'updated_at', 'title', 'content', 'like_id',
+            'id', 'owner', 'created_at', 'updated_at', 'title', 'content', 'like_id', 'is_private',
             'image', 'image_url', 'image_filter', 'is_owner', 'profile_id', 'profile_image',
             'postlikes_count', 'comments_count'
         ]
