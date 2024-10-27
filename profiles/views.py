@@ -26,16 +26,8 @@ class ProfileList(generics.ListAPIView):
         'owner__following__created_at', 'owner__followed__created_at'
     ]
     def get_queryset(self):
-        user = self.request.user
-        
-        if user.is_authenticated:
-            return Profile.objects.annotate(
-                posts_count=Count('owner__post', distinct=True),
-                followers_count=Count('owner__followed', distinct=True),
-                following_count=Count('owner__following', distinct=True)
-            ).order_by('-created_at')
 
-        return Profile.objects.filter(is_private=False).annotate(
+        return Profile.objects.annotate(
             posts_count=Count('owner__post', distinct=True),
             followers_count=Count('owner__followed', distinct=True),
             following_count=Count('owner__following', distinct=True)
