@@ -1,50 +1,45 @@
 from rest_framework import generics, permissions
-from socialize_backend.permissions import IsMessageOwnerOrInChat
-from django.db.models import Q
 from .models import Chat, Message
 from .serializers import ChatSerializer, MessageSerializer
+from socialize_backend.permissions import IsMessageOwnerOrInChat
 
 class ChatListCreateView(generics.ListCreateAPIView):
+    """
+    List all chats for the current user or create a new chat.
+    """
     serializer_class = ChatSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        return Chat.objects.filter(Q(user1=user) | Q(user2=user))
-    
-    
+        return Chat.objects.filter(user1=user) | Chat.objects.filter(user2=user)
+
 class ChatDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    """
+    Retrieve, update, or delete a chat.
+    """
     queryset = Chat.objects.all()
     serializer_class = ChatSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-        return Chat.objects.filter(Q(user1=user) | Q(user2=user))
-    
-    
+    permission_classes = [permissions.IsAuthenticated]
 
 class MessageListCreateView(generics.ListCreateAPIView):
+    """
+    List messages for a specific chat or create a new message in a chat.
+    """
     serializer_class = MessageSerializer
-    permission_classes = [permissions.IsAuthenticated, IsMessageOwnerOrInChat]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         chat_id = self.kwargs['chat_id']
         return Message.objects.filter(chat_id=chat_id)
-    
+
     def perform_create(self, serializer):
-        user = self.request.user
-        recipient = serializer.validated_data['owner']
-        chat, created = Chat.objects.get_or_create(
-            Q(user1=user, user2=recipient) | Q(user1=recipient, user2=user)
-        )
-        serializer.save(chat=chat)
-        
-        
+        serializer.save(owner=self.request.user)
 
 class MessageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, or delete a message.
+    """
+    queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    permission_classes = [permissions.IsAuthenticated, IsMessageOwnerOrInChat]
-
-    def get_queryset(self):
-        return Message.objects.all()
+    permission_classes = [IsMessageOwnerOrInChat]

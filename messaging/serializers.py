@@ -3,7 +3,7 @@ from .models import Message, Chat
 
 class MessageSerializer(serializers.ModelSerializer):
     owner_username = serializers.ReadOnlyField(source='owner.username')
-    owner_image_url = serializers.ReadOnlyField(source='owner.profile.image.url')
+    owner_image_url = serializers.ReadOnlyField(source='owner.profile.image_url')
 
     class Meta:
         model = Message
@@ -11,12 +11,19 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class ChatSerializer(serializers.ModelSerializer):
-    user1_username = serializers.ReadOnlyField(source='user1.username')
-    user1_image_url = serializers.ReadOnlyField(source='user1.profile.image.url')
-    user2_username = serializers.ReadOnlyField(source='user2.username')
-    user2_image_url = serializers.ReadOnlyField(source='user2.profile.image.url')
     messages = MessageSerializer(many=True, read_only=True)
+    other_user_username = serializers.SerializerMethodField()
+    other_user_profile_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Chat
-        fields = ['id', 'user1', 'user2', 'user1_username', 'user1_image_url', 'user2_username', 'user2_image_url', 'messages']
+        fields = ['id', 'messages', 'other_user_username', 'other_user_profile_image']
+
+    def get_other_user_username(self, obj):
+        request_user = self.context['request'].user
+        return obj.user2.username if obj.user1 == request_user else obj.user1.username
+
+    def get_other_user_profile_image(self, obj):
+        request_user = self.context['request'].user
+        other_user = obj.user2 if obj.user1 == request_user else obj.user1
+        return other_user.profile.image_url if hasattr(other_user, 'profile') else None
