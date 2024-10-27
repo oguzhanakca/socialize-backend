@@ -3,7 +3,7 @@ from .models import Message, Chat
 
 class MessageSerializer(serializers.ModelSerializer):
     owner_username = serializers.ReadOnlyField(source='owner.username')
-    owner_image_url = serializers.ReadOnlyField(source='owner.profile.image_url')
+    owner_image_url = serializers.ReadOnlyField(source='owner.profile.image')
 
     class Meta:
         model = Message
@@ -26,4 +26,4 @@ class ChatSerializer(serializers.ModelSerializer):
     def get_other_user_profile_image(self, obj):
         request_user = self.context['request'].user
         other_user = obj.user2 if obj.user1 == request_user else obj.user1
-        return other_user.profile.image_url if hasattr(other_user, 'profile') else None
+        return other_user.profile.image if hasattr(other_user, 'profile') else None
