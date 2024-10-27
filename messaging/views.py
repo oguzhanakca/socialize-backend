@@ -11,6 +11,18 @@ class ChatListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         return Chat.objects.filter(Q(user1=user) | Q(user2=user))
+    
+    
+class ChatDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Chat.objects.all()
+    serializer_class = ChatSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Chat.objects.filter(Q(user1=user) | Q(user2=user))
+    
+    
 
 class MessageListCreateView(generics.ListCreateAPIView):
     serializer_class = MessageSerializer
