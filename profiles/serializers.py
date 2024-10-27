@@ -10,7 +10,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     image_url = serializers.CharField(source='image.url', read_only=True)
     is_owner = serializers.SerializerMethodField()
     following_id = serializers.SerializerMethodField()
-    followed_by_current_user = serializers.SerializerMethodField()
     posts_count = serializers.ReadOnlyField()
     followers_count = serializers.ReadOnlyField()
     following_count = serializers.ReadOnlyField()
@@ -27,12 +26,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             ).first()
             return following.id if following else None
         return None
-    
-    def get_followed_by_current_user(self, obj):
-        user = self.context['request'].user
-        if user.is_authenticated:
-            return Follower.objects.filter(owner=user, followed=obj.owner).exists()
-        return False
         
     class Meta:
         model = Profile

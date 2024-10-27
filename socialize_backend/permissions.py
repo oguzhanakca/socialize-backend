@@ -8,12 +8,8 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     If not, everyone can read posts and profile owner can CRUD.
     """
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            if not obj.is_private:  
-                return True
-            return Follower.objects.filter(
-                owner=request.user, followed=obj.owner
-            ).exists() or obj.owner == request.user
+        if request.method in permissions.SAFE_METHODS: 
+            return True
         return obj.owner == request.user
     
     
