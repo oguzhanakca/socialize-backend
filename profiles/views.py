@@ -1,4 +1,3 @@
-from django.db.models import Q
 from django.db.models import Count
 from django.contrib.auth.models import AnonymousUser
 from rest_framework import generics, filters

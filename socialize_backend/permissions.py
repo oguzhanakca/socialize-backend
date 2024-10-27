@@ -13,3 +13,10 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.owner == request.user
     
     
+class IsMessageOwnerOrInChat(permissions.BasePermission):
+    """
+    Allow access only to the owner of the message or the users in the chat.
+    """
+    def has_object_permission(self, request, view, obj):
+        
+        return obj.owner == request.user or obj.chat.user1 == request.user or obj.chat.user2 == request.user
