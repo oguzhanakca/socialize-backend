@@ -13,7 +13,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
                 return True
             return Follower.objects.filter(
                 owner=request.user, followed=obj.owner
-            ).exists() or obj.owner == request.user
+            ).exists()
         return obj.owner == request.user
     
     
