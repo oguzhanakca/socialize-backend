@@ -29,16 +29,11 @@ class ProfileList(generics.ListAPIView):
         user = self.request.user
         
         if user.is_authenticated:
-            # return Profile.objects.annotate(
-            #     posts_count=Count('owner__post', distinct=True),
-            #     followers_count=Count('owner__followed', distinct=True),
-            #     following_count=Count('owner__following', distinct=True)
-            # ).filter(
-            #     Q(is_private=False) | 
-            #     Q(owner__following__followed=user) | 
-            #     Q(owner=user)
-            # ).order_by('-created_at')
-            return Profile.objects.all()
+            return Profile.objects.annotate(
+                posts_count=Count('owner__post', distinct=True),
+                followers_count=Count('owner__followed', distinct=True),
+                following_count=Count('owner__following', distinct=True)
+            ).order_by('-created_at')
 
         return Profile.objects.filter(is_private=False).annotate(
             posts_count=Count('owner__post', distinct=True),
