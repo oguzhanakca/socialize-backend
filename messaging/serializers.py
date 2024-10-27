@@ -2,12 +2,12 @@ from rest_framework import serializers
 from .models import Message, Chat
 
 class MessageSerializer(serializers.ModelSerializer):
-    owner_username = serializers.ReadOnlyField(source='owner.username')
+    owner = serializers.ReadOnlyField(source='owner.username')
     owner_image_url = serializers.ReadOnlyField(source='owner.profile.image.url')
 
     class Meta:
         model = Message
-        fields = ['id', 'chat', 'owner', 'owner_username', 'owner_image_url', 'content', 'timestamp']
+        fields = ['id', 'chat', 'owner', 'owner_image_url', 'content', 'timestamp']
 
 
 class ChatSerializer(serializers.ModelSerializer):
