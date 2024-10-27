@@ -5,7 +5,7 @@ import cloudinary.uploader
 
 
 class PostSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
+    owner = serializers.ReadOnlyField(source='owner.profile')
     image = serializers.ImageField(write_only=True, required=False)
     image_url = serializers.CharField(source='image.url', read_only=True)
     is_owner = serializers.SerializerMethodField()
