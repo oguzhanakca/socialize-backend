@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Post
+from followers.models import Follower
 from likes.models import PostLike
 import cloudinary.uploader
 
@@ -15,6 +16,8 @@ class PostSerializer(serializers.ModelSerializer):
     postlikes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
     is_private = serializers.ReadOnlyField(source='owner.profile.is_private')
+    following_id = serializers.SerializerMethodField()
+    
 
     
     def validate_image(self, value):
@@ -44,12 +47,21 @@ class PostSerializer(serializers.ModelSerializer):
             ).first()
             return like.id if like else None
         return None
+    
+    def get_following_id(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            following = Follower.objects.filter(
+                owner = user, followed = obj.owner
+            ).first()
+            return following.id if following else None
+        return None
         
     class Meta:
         model = Post
         fields = [
             'id', 'owner', 'created_at', 'updated_at', 'title', 'content', 'like_id', 'is_private',
-            'image', 'image_url', 'image_filter', 'is_owner', 'profile_id', 'profile_image',
+            'image', 'image_url', 'image_filter', 'is_owner', 'profile_id', 'profile_image', 'following_id',
             'postlikes_count', 'comments_count'
         ]
         
