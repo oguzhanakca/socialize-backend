@@ -14,14 +14,19 @@ class ChatSerializer(serializers.ModelSerializer):
     messages = MessageSerializer(many=True, read_only=True)
     other_user_username = serializers.SerializerMethodField()
     other_user_profile_image = serializers.SerializerMethodField()
+    other_user_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Chat
-        fields = ['id', 'messages', 'other_user_username', 'other_user_profile_image', 'user1', 'user2']
+        fields = ['id', 'messages', 'other_user_username', 'other_user_profile_image', 'other_user_id', 'user1', 'user2']
 
     def get_other_user_username(self, obj):
         request_user = self.context['request'].user
         return obj.user2.username if obj.user1 == request_user else obj.user1.username
+    
+    def get_other_user_id(self, obj):
+        request_user = self.context['request'].user
+        return obj.user2.id if obj.user1 == request_user else obj.user1.id
 
     def get_other_user_profile_image(self, obj):
         request_user = self.context['request'].user
