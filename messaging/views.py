@@ -41,6 +41,7 @@ class MessageListCreateView(generics.ListCreateAPIView):
         return Message.objects.filter(chat_id=chat_id)
 
     def perform_create(self, serializer):
+        print("Creating message for owner:", self.request.user)
         serializer.save(owner=self.request.user)
 
 class MessageDetailView(generics.RetrieveUpdateDestroyAPIView):
