@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 from rest_framework import generics, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Post
@@ -40,6 +40,28 @@ class PostList(generics.ListCreateAPIView):
         'comments_count',
         'post_likes__created_at'
     ]
+    
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return Post.objects.all()
+        elif user.is_authenticated:
+            return Post.objects.annotate(
+                comments_count=Count('comment', distinct=True),
+                postlikes_count=Count('post_likes', distinct=True)
+            ).filter(
+                Q(owner__profile__is_private=False) | 
+                Q(owner__followed__owner=user) | 
+                Q(owner=user)
+            ).order_by('-created_at')
+        else:
+            return Post.objects.annotate(
+                    comments_count=Count('comment', distinct=True),
+                    postlikes_count=Count('post_likes', distinct=True)
+                ).filter(
+                    Q(owner__profile__is_private=False)
+                ).order_by('-created_at')
+    
     
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
