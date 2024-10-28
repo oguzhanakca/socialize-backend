@@ -14,9 +14,7 @@ class ChatListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Chat.objects.filter(user1=user) | Chat.objects.filter(user2=user).annotate(
-            last_message=Max('messages__timestamp')
-        ).order_by('-last_message')
+        return Chat.objects.filter(user1=user) | Chat.objects.filter(user2=user)
     
     def perform_create(self, serializer):
         user2_id = self.request.data.get('user2')
