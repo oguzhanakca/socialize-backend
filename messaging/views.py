@@ -3,6 +3,7 @@ from .models import Chat, Message
 from django.contrib.auth.models import User
 from .serializers import ChatSerializer, MessageSerializer
 from socialize_backend.permissions import IsMessageOwnerOrInChat
+from django.db.models import Max
 
 class ChatListCreateView(generics.ListCreateAPIView):
     """
@@ -13,7 +14,9 @@ class ChatListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Chat.objects.filter(user1=user) | Chat.objects.filter(user2=user)
+        return Chat.objects.filter(user1=user) | Chat.objects.filter(user2=user).annotate(
+            last_message_time=Max('messages__timestamp')
+        ).order_by('-last_message_time')
     
     def perform_create(self, serializer):
         user2_id = self.request.data.get('user2')
