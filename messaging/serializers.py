@@ -24,7 +24,7 @@ class ChatSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Chat
-        fields = ['id', 'messages', 'other_user_username', 'other_user_profile_image', 'other_user_id', 'user1', 'user2', 'last_message']
+        fields = ['id', 'messages', 'other_user_username', 'other_user_profile_image', 'other_user_id', 'user1', 'user2', 'last_message_time']
 
     def get_other_user_username(self, obj):
         request_user = self.context['request'].user
