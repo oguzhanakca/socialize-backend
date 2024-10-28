@@ -20,7 +20,6 @@ class ChatSerializer(serializers.ModelSerializer):
     other_user_username = serializers.SerializerMethodField()
     other_user_profile_image = serializers.SerializerMethodField()
     other_user_id = serializers.SerializerMethodField()
-    last_message = serializers.SerializerMethodField()
     
     
     class Meta:
@@ -40,7 +39,4 @@ class ChatSerializer(serializers.ModelSerializer):
         other_user = obj.user2 if obj.user1 == request_user else obj.user1
         return other_user.profile.image.url if hasattr(other_user, 'profile') else None
     
-    def get_last_message(self, obj):
-        last_message = obj.messages.order_by('-timestamp').first()
-        return MessageSerializer(last_message).data if last_message else None
     

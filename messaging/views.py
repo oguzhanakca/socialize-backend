@@ -14,22 +14,9 @@ class ChatListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-
-        # Subquery to get the timestamp of the last message
-        last_message_timestamp = Message.objects.filter(
-            chat=OuterRef('pk')
-        ).order_by('-timestamp').values('timestamp')[:1]
-
-        # Filter the chats for the current user and order by the last message's timestamp
         return (
             Chat.objects.filter(user1=user) | Chat.objects.filter(user2=user)
-        ).annotate(
-            last_message_time=Subquery(last_message_timestamp)
         ).order_by('-last_message_time')
-    
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     return Chat.objects.filter(user1=user) | Chat.objects.filter(user2=user)
     
     def perform_create(self, serializer):
         user2_id = self.request.data.get('user2')
