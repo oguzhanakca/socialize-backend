@@ -61,10 +61,10 @@ class PostSerializer(serializers.ModelSerializer):
         return None
     
     def get_created_at(self, obj):
-        return naturaltime(obj.timestamp)
+        return naturaltime(obj.created_at)
     
     def get_updated_at(self, obj):
-        return naturaltime(obj.timestamp)
+        return naturaltime(obj.updated_at)
         
     class Meta:
         model = Post
