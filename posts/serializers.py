@@ -1,3 +1,4 @@
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from rest_framework import serializers
 from .models import Post
 from followers.models import Follower
@@ -17,6 +18,8 @@ class PostSerializer(serializers.ModelSerializer):
     comments_count = serializers.ReadOnlyField()
     is_private = serializers.ReadOnlyField(source='owner.profile.is_private')
     following_id = serializers.SerializerMethodField()
+    created_at = serializers.SerializerMethodField()
+    updated_at = serializers.SerializerMethodField()
     
 
     
@@ -56,6 +59,12 @@ class PostSerializer(serializers.ModelSerializer):
             ).first()
             return following.id if following else None
         return None
+    
+    def get_created_at(self, obj):
+        return naturaltime(obj.timestamp)
+    
+    def get_updated_at(self, obj):
+        return naturaltime(obj.timestamp)
         
     class Meta:
         model = Post
