@@ -45,7 +45,7 @@ if 'DEV' not in os.environ:
     ]
     
 REST_AUTH = {
-    'REST_USE_JWT': True,
+    'USE_JWT': True,
     'JWT_AUTH_SECURE': True,
     'JWT_AUTH_COOKIE': 'my-app-auth',
     'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
