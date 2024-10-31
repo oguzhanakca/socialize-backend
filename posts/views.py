@@ -40,7 +40,7 @@ class PostList(generics.ListCreateAPIView):
         'comments_count',
         'post_likes__created_at'
     ]
-    
+
     def get_queryset(self):
         user = self.request.user
         if user.is_superuser:
@@ -50,8 +50,8 @@ class PostList(generics.ListCreateAPIView):
                 comments_count=Count('comment', distinct=True),
                 postlikes_count=Count('post_likes', distinct=True)
             ).filter(
-                Q(owner__profile__is_private=False) | 
-                Q(owner__followed__owner=user) | 
+                Q(owner__profile__is_private=False) |
+                Q(owner__followed__owner=user) |
                 Q(owner=user)
             ).order_by('-created_at')
         else:
@@ -61,12 +61,11 @@ class PostList(generics.ListCreateAPIView):
                 ).filter(
                     Q(owner__profile__is_private=False)
                 ).order_by('-created_at')
-    
-    
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-    
-    
+
+
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Retrieve post, edit and delete if you own it.
@@ -77,4 +76,3 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
         comments_count=Count('comment', distinct=True),
         postlikes_count=Count('post_likes', distinct=True)
     ).order_by('-created_at')
-   

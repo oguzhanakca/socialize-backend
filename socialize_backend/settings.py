@@ -16,7 +16,7 @@ import dj_database_url
 
 if os.path.exists("env.py"):
     import env
-    
+
 CLOUDINARY_STORAGE = {
     "CLOUDINARY_URL": os.environ.get("CLOUDINARY_URL")
 }
@@ -33,7 +33,7 @@ REST_FRAMEWORK = {
         if 'DEV' in os.environ
         else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 
+    'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 15,
     'DATETIME_FORMAT': '%d %b %Y - %H:%M'
@@ -43,7 +43,7 @@ if 'DEV' not in os.environ:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
         'rest_framework.renderers.JSONRenderer',
     ]
-    
+
 REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_SECURE': True,
@@ -91,14 +91,14 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'corsheaders',
-    
+
     'profiles',
     'posts',
     'comments',
     'likes',
     'followers',
     'messaging',
-    
+
 ]
 SITE_ID = 1
 
@@ -122,7 +122,7 @@ else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
         r"^https://.*\.gitpod\.io$",
     ]
-    
+
 CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'socialize_backend.urls'

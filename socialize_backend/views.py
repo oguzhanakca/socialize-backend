@@ -3,14 +3,13 @@ from rest_framework.response import Response
 from .settings import REST_AUTH
 
 
-
 @api_view()
 def root_route(request):
     return Response({
         "message": "Here comes the API"
     })
-    
-    
+
+
 @api_view(['POST'])
 def logout_route(request):
     response = Response()

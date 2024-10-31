@@ -7,6 +7,9 @@ from .serializers import CommentDetailSerializer, CommentSerializer
 
 
 class CommentList(generics.ListCreateAPIView):
+    """
+    List all comments and create comment
+    """
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Comment.objects.annotate(
@@ -23,12 +26,15 @@ class CommentList(generics.ListCreateAPIView):
         'commentlikes_count',
         'comment_likes__created_at'
     ]
-    
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-        
+
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, Edit and delete comment
+    """
     permission_classes = [IsOwnerOrReadOnly]
     serializer_class = CommentDetailSerializer
     queryset = Comment.objects.annotate(
