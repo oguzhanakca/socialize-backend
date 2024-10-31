@@ -1,131 +1,220 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Socialize API
 
-Welcome USER_NAME,
+**Developer: Oğuzhan Akça**
 
-This is the Code Institute student template for Gitpod. We have preinstalled all of the tools you need to get started. It's perfectly ok to use this template as the basis for your project submissions.
+The **Socialize API** is a Django Rest Framework API for social media applications with a focus images. The API is primarily used for the [Socialize](https://github.com/oguzhanakca/socialize-frontend) app, a social media app for posting images and chatting.
 
-You can safely delete this README.md file or change it for your own project. Please do read it at least once, though! It contains some important information about Gitpod and the extensions we use. Some of this information has been updated since the video content was created. The last update to this file was: **June 18, 2024**
+[API Link](https://socialize-backend-app-9beed826b5f2.herokuapp.com/)
 
-## Gitpod Reminders
+[Socialize](https://socialize-frontend-app-cfe4edcc8238.herokuapp.com/)
 
-To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
+## Table of Contents
 
-`python3 -m http.server`
+- [Features](#features)
+    - [Existing Features](#existing-features)
+    - [Future Feature Ideas](#future-feature-ideas)
+- [Design Process](#design-process)
+    - [User Stories](#user-stories)
+    - [Data Models](#data-models)
+- [API Endpoints](#api-endpoints)
+- [Technologies Used](#technologies-used)
+    - [Frameworks and Languages](#frameworks-and-languages)
+    - [Libraries & Tools](#libraries--tools)
+- [Testing](#testing)
+- [Credits](#credits)
+    - [Sources](#sources)
+    - [Acknowledgements](#acknowledgements)
 
-A blue button should appear to click: _Make Public_,
+## Features
 
-Another blue button should appear to click: _Open Browser_.
+### Existing Features
 
-To run a backend Python file, type `python3 app.py` if your Python file is named `app.py`, of course.
+- **User Authentication**: Users can sign up and login. User profiles are automatically created upon sign-up.
+- **Profile Settings**: Users can edit change usernames and passwords and they can change their profile between private and public.
+- **Posts**: All users can view posts of public profiles. Authenticated users can also view private posts of followed users, edit or delete their own posts. Users can also filter posts by their owner and title.
+- **Likes**: Authenticated users can like/unlike the posts and comments that doesnt belong to them.
+- **Comments**: Authenticated users can comment on posts.
+- **Follows**: Authenticated users can follow each other. Followers can also view private user's posts.
+- **Chat**: Authenticated users can view their chat list, send messages to other users and delete those messages.
 
-A blue button should appear to click: _Make Public_,
+### Future Feature Ideas
 
-Another blue button should appear to click: _Open Browser_.
+- Allowing to update videos.
+- Adding notifications on Like, Comments and Messages.
+- Adding more security options to profile like email verifications etc.
+- Adding online status of users.
 
-By Default, Gitpod gives you superuser security privileges. Therefore, you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
+## Design Process
 
-To log into the Heroku toolbelt CLI:
+### User Stories
 
-1. Log in to your Heroku account and go to *Account Settings* in the menu under your avatar.
-2. Scroll down to the *API Key* and click *Reveal*
-3. Copy the key
-4. In Gitpod, from the terminal, run `heroku_config`
-5. Paste in your API key when asked
+1. As a user, I want to access an API endpoint that allows users to register by providing their username and password.
+2. As a user, I want to access an API endpoint that allows users to log in, obtain an authentication token, and access user-specific content.
+3. As a user, I want to be able to create, read, update user profiles by using API endpoints.
+3. As a user using the API, I want a user profile to be automatically created, when a new user signs up for my application.
+4. As a user, I want to be able to create, read, update and delete user posts by using API endpoints.
+4. As a user, I want to be able to filter and order user posts.
+5. As a user, I want to be able to create, read, update and delete user comments by using API endpoints.
+5. As a user, I want to be able to filter user comments on a a specific post.
+6. As a user, I want to be able to create, read, update and delete user likes by using API endpoints.
+7. As a user, I want to be able to create, read and delete followers by using API endpoints.
+7. As a user, I want to be able to filter followers of a specific profile.
+8. As a user, I want to be able to create, read and delete chats by using API endpoints.
+9. As a user, I want to be able to create, read and delete messages by using API endpoints.
+9. As a user, I want to be able to filter all the messages of a specific chat.
 
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you, so do not share it. If you accidentally make it public, you can create a new one with _Regenerate API Key_.
+### Data Models
 
-### Connecting your Mongo database
+![Entity Relationship Diagram](docs/sonic-explorers-api-erd.png)
 
-- **Connect to Mongo CLI on a IDE**
-- navigate to your MongoDB Clusters Sandbox
-- click **"Connect"** button
-- select **"Connect with the MongoDB shell"**
-- select **"I have the mongo shell installed"**
-- choose **mongosh (2.0 or later)** for : **"Select your mongo shell version"**
-- choose option: **"Run your connection string in your command line"**
-- in the terminal, paste the copied code `mongo "mongodb+srv://<CLUSTER-NAME>.mongodb.net/<DBname>" --apiVersion 1 --username <USERNAME>`
-  - replace all `<angle-bracket>` keys with your own data
-- enter password _(will not echo **\*\*\*\*** on screen)_
+#### User Model
 
-------
+- The User model contains information about the user. It is part of the Django allauth library.
+- One-to-one relation with the Profile model's owner field
+- ForeignKey relation with the Post model's owner
+- ForeignKey relation with the Comment model's owner
+- ForeignKey relation with the PostLike model's owner
+- ForeignKey relation with the CommentLike model's owner
+- ForeignKey relation with the Follower model's owner
+- ForeignKey relation with the Chat model's user1
+- ForeignKey relation with the Chat model's user2
+- ForeignKey relation with the Message model's owner
 
-## Release History
+#### Profile Model
 
-We continually tweak and adjust this template to help give you the best experience. Here is the version history:
+- The Profile model contains the following fields: owner, bio, image, created_at, updated_at, is_private
+- Used cloudinary for image field.
+- One-to-one relation between the owner field and User's id field
 
-**June 18, 2024,** Add Mongo back into template
+#### Post Model
 
-**June 14, 2024,** Temporarily remove Mongo until the key issue is resolved
+- The Post model contains the following fields: owner, created_at, updated_at, title, content.
+- ForeignKey relation with the Comment model's post field.
+- ForeignKey relation with the PostLike model's post field.
 
-**May 28 2024:** Fix Mongo and Links installs
+#### Comment Model
 
-**April 26 2024:** Update node version to 16
+- The Comment model contains the following fields: owner, post,  created_at, updated_at, content.
+- ForeignKey relation with the CommentLike model's comment field.
 
-**September 20 2023:** Update Python version to 3.9.17.
+#### PostLike and CommentLike Models
 
-**September 1 2021:** Remove `PGHOSTADDR` environment variable.
+- The PostLike and CommentLike models contain the following fields: owner, post(PostLike), comment(CommentLike), created_at.
+- ForeignKey relation with the CommentLike model's comment field.
+ 
+#### Follower Model
 
-**July 19 2021:** Remove `font_fix` script now that the terminal font issue is fixed.
+- The Follower model contains the following fields: owner, followed, created_at.
 
-**July 2 2021:** Remove extensions that are not available in Open VSX.
+#### Chat Model
 
-**June 30 2021:** Combined the P4 and P5 templates into one file, added the uptime script. See the FAQ at the end of this file.
+- The Chat model contains the following fields: user1, user2, created_at, last_message_time.
+- ForeignKey relation with the Message model's chat field.
 
-**June 10 2021:** Added: `font_fix` script and alias to fix the Terminal font issue
+#### Message Model
 
-**May 10 2021:** Added `heroku_config` script to allow Heroku API key to be stored as an environment variable.
+- The Message model contains the following fields: chat, owner, timestamp, content.
 
-**April 7 2021:** Upgraded the template for VS Code instead of Theia.
+## API Endpoints
 
-**October 21 2020:** Versions of the HTMLHint, Prettier, Bootstrap4 CDN and Auto Close extensions updated. The Python extension needs to stay the same version for now.
+The Socialize API provides the following endpoints:
 
-**October 08 2020:** Additional large Gitpod files (`core.mongo*` and `core.python*`) are now hidden in the Explorer, and have been added to the `.gitignore` by default.
+| Endpoint | HTTP Method | CRUD | View Type | Permissions |
+|---|---|---|---|---|
+| **Authentication and Profiles** |
+| /api-auth/login/ | GET | N/A | N/A | Public |  |
+|  | POST | N/A | N/A | Public |  |
+| /api-auth/logout/ | GET | N/A | N/A | Public |  |
+| /dj-rest-auth/registration/ | POST | N/A | N/A | Public |  |
+| /dj-rest-auth/login/ | POST | N/A | N/A | Public |  |
+| /dj-rest-auth/logout/ | POST | N/A | N/A | Authenticated |  |
+| /profiles/ | GET | Read | List | Public |
+| /profiles/\<int:pk\>/ | GET | Read | Detail | Public |  |
+|  | PUT | Update | Detail | Owner |  |
+| **Posts Endpoints** |
+| /posts/ | GET | Read | List | Public |
+|  | POST | Create | List | Authenticated |  |
+| /posts/\<int:pk\>/ | GET | Read | Detail | Public |  |
+|  | PUT | Update | Detail | Owner |  |
+|  | DELETE | Delete | Detail | Owner |  |
+| **Likes Endpoints** |
+| /postlikes/ | GET | Read | List | Public |  |
+|  | POST | Create | List | Authenticated |  |
+| /postlikes/\<int:pk\>/ | GET | Read | Detail | Public |  |
+|  | DELETE | Delete | Detail | Owner |  |
+| /commentlikes/ | GET | Read | List | Public |  |
+|  | POST | Create | List | Authenticated |  |
+| /commentlikes/\<int:pk\>/ | GET | Read | Detail | Public |  |
+|  | DELETE | Delete | Detail | Owner |  |
+| **Comments Endpoints** |
+| /comments/ | GET | Read | List | Public |
+|  | POST | Create | List | Authenticated |  |
+| /comments/\<int:pk\>/ | GET | Read | Detail | Public |  |
+|  | PUT | Update | Detail | Owner |  |
+|  | DELETE | Delete | Detail | Owner |  |
+| **Followers Endpoints** |
+| /followers/ | GET | Read | List | Public |  |
+|  | POST | Create | List | Authenticated |  |
+| /followers/\<int:pk>/ | GET | Read | Detail | Public |  |
+|  | DELETE | Delete | Detail | Owner |  |
+| **Chat Endpoints** |
+| /chats/ | GET | Read | List | Authenticated |  |
+|  | POST | Create | List | Authenticated |  |
+| /chats/\<int:pk\> | GET | Read | Detail | Participant |  |
+|  | DELETE | Delete | Detail | Participant |  |
+| chats/\<int:chat_id>\/messages/ | GET | Read | List | Participant |  |
+| messages/\<int:pk>\/ | GET | Read | Detail | Owner |  |
+|  | DELETE | Delete | Detail | Owner |  |
 
-**September 22 2020:** Gitpod occasionally creates large `core.Microsoft` files. These are now hidden in the Explorer. A `.gitignore` file has been created to make sure these files will not be committed, along with other common files.
 
-**April 16 2020:** The template now automatically installs MySQL instead of relying on the Gitpod MySQL image. The message about a Python linter not being installed has been dealt with, and the set-up files are now hidden in the Gitpod file explorer.
+## Technologies Used
 
-**April 13 2020:** Added the _Prettier_ code beautifier extension instead of the code formatter built-in to Gitpod.
+### Frameworks and Languages
 
-**February 2020:** The initialisation files now _do not_ auto-delete. They will remain in your project. You can safely ignore them. They just make sure that your workspace is configured correctly each time you open it. It will also prevent the Gitpod configuration popup from appearing.
+- Python
+- Django
+- Django Rest Framework
 
-**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <a href="https://github.com/Eventyret/vscode-bcdn" target="_blank">README.md file at the official repo</a> for more options.
+### Libraries & Tools
 
-------
+- [Am I Responsive](http://ami.responsivedesign.is/)
+- [GitHub](https://github.com/)
+- [Heroku Platform](https://id.heroku.com/login)
+- [Postgres](https://www.postgresql.org/)
+- [Allauth](https://docs.allauth.org/en/latest/)
+- [CI Python Linter](https://pep8ci.herokuapp.com/)
 
-## FAQ about the uptime script
+## Validation
+[CI Python Linter](https://pep8ci.herokuapp.com/) from Code Institute used for validation. All errors are fixed.
 
-**Why have you added this script?**
+## Testing
 
-It will help us to calculate how many running workspaces there are at any one time, which greatly helps us with cost and capacity planning. It will help us decide on the future direction of our cloud-based IDE strategy.
+**Test** | **Action** | **Expected Result** | **Actual Result**
+-------- | ------------------- | ------------------- | -----------------
+User | Create user | User account can be created | Works as expected
+User | Change username and password | Logged in user can change username and password | Works as expected
+Profile | Create profile | Automatically create a profile when a user is created | Works as expected
+Profile | Edit profile | Profile owner can edit profile information | Works as expected
+Post | Create post | Logged in user can create post | Works as expected
+Post | Update and Delete | Post owner can edit and delete post | Works as expected
+Comment | Create comment | Logged in user can comment on posts | Works as expected
+Comment | Update and delete comment | Comment owner can edit and delete comment | Works as expected
+Likes | Create likes | Logged in user can like post and comments likes | Works as expected
+Likes | Delete likes | Like owner can delete post and comment likes | Works as expected
+Follower | Create |  Logged in user can follow an unfollowed profile | Works as expected
+Follower | Delete |  Logged in user can unfollow a followed profile | Works as expected
+Chat | Create chat | Logged in user can start chat with other users | Works as expected
+Chat | Delete chat | Chat participants can delete existing chat | Works as expected
+Message | Create message | Logged in users can send message to other users | Works as expected
+Message | Delete message | Message owner can delete message. | Works as expected
 
-**How will this affect me?**
 
-For everyday usage of Gitpod, it doesn’t have any effect at all. The script only captures the following data:
+## Credits
 
-- An ID that is randomly generated each time the workspace is started.
-- The current date and time
-- The workspace status of “started” or “running”, which is sent every 5 minutes.
+### Code
 
-It is not possible for us or anyone else to trace the random ID back to an individual, and no personal data is being captured. It will not slow down the workspace or affect your work.
+This project was created based on the Code Institute's Django REST API walkthrough project [Moments](https://github.com/Code-Institute-Solutions/drf-api)
 
-**So….?**
-
-We want to tell you this so that we are being completely transparent about the data we collect and what we do with it.
-
-**Can I opt out?**
-
-Yes, you can. Since no personally identifiable information is being captured, we'd appreciate it if you let the script run; however if you are unhappy with the idea, simply run the following commands from the terminal window after creating the workspace, and this will remove the uptime script:
-
-```
-pkill uptime.sh
-rm .vscode/uptime.sh
-```
-
-**Anything more?**
-
-Yes! We'd strongly encourage you to look at the source code of the `uptime.sh` file so that you know what it's doing. As future software developers, it will be great practice to see how these shell scripts work.
-
----
-
-Happy coding!
+- [Django documentation](https://www.djangoproject.com/)
+- [Django Rest Framework documentation](https://www.django-rest-framework.org/)
+- [Cloudinary documentation](https://cloudinary.com/documentation)
