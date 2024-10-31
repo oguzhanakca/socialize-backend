@@ -65,7 +65,7 @@ The **Socialize API** is a Django Rest Framework API for social media applicatio
 
 ### Data Models
 
-![Entity Relationship Diagram](docs/sonic-explorers-api-erd.png)
+![Entity Relationship Diagram](docs/ERM.png)
 
 #### User Model
 
