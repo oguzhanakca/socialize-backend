@@ -80,7 +80,8 @@ class PostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         image = validated_data.pop('image', None)
         if image:
-            upload_data = cloudinary.uploader.upload(image)
+            upload_data = cloudinary.uploader.upload(
+                image,transformation={'fetch_format': 'auto'})
             validated_data['image'] = upload_data['public_id']
         else:
             validated_data['image'] = 'default_post_uu0i5n'
