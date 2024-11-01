@@ -20,17 +20,15 @@ The **Socialize API** is a Django Rest Framework API for social media applicatio
 - [Technologies Used](#technologies-used)
     - [Frameworks and Languages](#frameworks-and-languages)
     - [Libraries & Tools](#libraries--tools)
-- [Testing](#testing)
+- [Validation](#validation)
 - [Credits](#credits)
-    - [Sources](#sources)
-    - [Acknowledgements](#acknowledgements)
 
 ## Features
 
 ### Existing Features
 
 - **User Authentication**: Users can sign up and login. User profiles are automatically created upon sign-up.
-- **Profile Settings**: Users can edit change usernames and passwords and they can change their profile between private and public.
+- **Profile Settings**: Users can edit their profile image, privacy and bio. They can also change username and password.
 - **Posts**: All users can view posts of public profiles. Authenticated users can also view private posts of followed users, edit or delete their own posts. Users can also filter posts by their owner and title.
 - **Likes**: Authenticated users can like/unlike the posts and comments that doesnt belong to them.
 - **Comments**: Authenticated users can comment on posts.
@@ -211,9 +209,7 @@ Message | Delete message | Message owner can delete message. | Works as expected
 
 ## Credits
 
-### Code
-
-This project was created based on the Code Institute's Django REST API walkthrough project [Moments](https://github.com/Code-Institute-Solutions/drf-api)
+This project was created based on the Code Institute's Django REST API walkthrough project [Moments](https://github.com/Code-Institute-Solutions/drf-api).
 
 - [Django documentation](https://www.djangoproject.com/)
 - [Django Rest Framework documentation](https://www.django-rest-framework.org/)
