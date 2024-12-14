@@ -120,7 +120,7 @@ The **Socialize API** is a Django Rest Framework API for social media applicatio
 
 The Socialize API provides the following endpoints:
 
-| Endpoint                        | HTTP Method | CRUD   | View Type | Permissions   |
+| Endpoint                        | HTTP Method | CRUD   | View Type | Permissions   | --- |
 | ------------------------------- | ----------- | ------ | --------- | ------------- | --- |
 | **Authentication and Profiles** |
 | /api-auth/login/                | GET         | N/A    | N/A       | Public        |     |
